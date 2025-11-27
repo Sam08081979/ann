@@ -9,17 +9,25 @@ import { Card } from '../../../shared/ui/index.js';
 export const PaymentScheduleTable = ({ schedule, calculationMode, earlyRepayments = [] }) => {
   const [expandedYears, setExpandedYears] = useState({});
 
-  const earlyRepaymentDates = useMemo(() => {
-    return new Set(earlyRepayments.map(r => {
-      const date = new Date(r.date);
-      return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
-    }));
-  }, [earlyRepayments]);
-
-  const formatDateForComparison = (dateStr) => {
-    const date = new Date(dateStr);
-    return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
-  };
+  const earlyRepaymentPaymentIndices = useMemo(() => {
+    if (!earlyRepayments.length || !schedule.length) return new Set();
+    
+    const indices = new Set();
+    
+    for (const repayment of earlyRepayments) {
+      const repaymentDate = new Date(repayment.date);
+      
+      for (let i = 0; i < schedule.length; i++) {
+        const paymentDate = new Date(schedule[i].payDtWk);
+        if (paymentDate >= repaymentDate) {
+          indices.add(i);
+          break;
+        }
+      }
+    }
+    
+    return indices;
+  }, [earlyRepayments, schedule]);
 
   const groupedByYear = useMemo(() => {
     if (!schedule.length) return {};
@@ -115,9 +123,7 @@ export const PaymentScheduleTable = ({ schedule, calculationMode, earlyRepayment
                     {groupedByYear[year].map((item) => {
                       const interest =
                         calculationMode === 'exact' ? item.intExact : item.intSimple;
-                      const isEarlyRepayment = earlyRepaymentDates.has(
-                        formatDateForComparison(item.payDtWk)
-                      );
+                      const isEarlyRepayment = earlyRepaymentPaymentIndices.has(item.originalIndex);
 
                       return (
                         <tr
