@@ -1,0 +1,38 @@
+{
+  "name": "ann-credit-calculator",
+  "version": "1.0.0",
+  "description": "Кредитный калькулятор с расчетом аннуитетных платежей",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "dependencies": {
+    "clsx": "^2.1.0",
+    "date-fns": "^3.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.22",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18",
+    "vite": "^5.1.4"
+  },
+  "keywords": [
+    "credit",
+    "calculator",
+    "annuity",
+    "payment",
+    "schedule"
+  ],
+  "author": "",
+  "license": "MIT"
+}
