@@ -6,40 +6,6 @@ import React, { useMemo, useState } from 'react';
 import { formatCurrency, formatDateDisplay } from '../../../shared/lib/index.js';
 import { Card } from '../../../shared/ui/index.js';
 
-const YearSummaryRow = ({ year, payments, calculationMode }) => {
-  const summary = useMemo(() => {
-    return payments.reduce(
-      (acc, item) => {
-        const interest = calculationMode === 'exact' ? item.intExact : item.intSimple;
-        return {
-          totalPayment: acc.totalPayment + item.payAm,
-          totalPrincipal: acc.totalPrincipal + item.principal,
-          totalInterest: acc.totalInterest + interest,
-        };
-      },
-      { totalPayment: 0, totalPrincipal: 0, totalInterest: 0 }
-    );
-  }, [payments, calculationMode]);
-
-  return (
-    <tr className="row-year-separator">
-      <td colSpan={3} className="px-4 py-3 text-sm font-semibold text-gray-700">
-        Итого за {year} год ({payments.length} платежей)
-      </td>
-      <td className="px-4 py-3 text-sm font-semibold text-gray-900 text-right">
-        {formatCurrency(summary.totalPayment)}
-      </td>
-      <td className="px-4 py-3 text-sm font-semibold text-gray-700 text-right">
-        {formatCurrency(summary.totalPrincipal)}
-      </td>
-      <td className="px-4 py-3 text-sm font-semibold text-gray-700 text-right">
-        {formatCurrency(summary.totalInterest)}
-      </td>
-      <td className="px-4 py-3"></td>
-    </tr>
-  );
-};
-
 export const PaymentScheduleTable = ({ schedule, calculationMode, earlyRepayments = [] }) => {
   const [expandedYears, setExpandedYears] = useState({});
 
@@ -159,7 +125,7 @@ export const PaymentScheduleTable = ({ schedule, calculationMode, earlyRepayment
                           className={`
                             transition-colors duration-150
                             ${isEarlyRepayment 
-                              ? 'row-early-repayment hover:bg-green-100' 
+                              ? 'bg-green-50 hover:bg-green-100' 
                               : 'hover:bg-gray-50'
                             }
                           `}
@@ -195,12 +161,6 @@ export const PaymentScheduleTable = ({ schedule, calculationMode, earlyRepayment
                         </tr>
                       );
                     })}
-
-                    <YearSummaryRow
-                      year={year}
-                      payments={groupedByYear[year]}
-                      calculationMode={calculationMode}
-                    />
                   </>
                 )}
               </React.Fragment>
